@@ -28,26 +28,8 @@ public class CartController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-//		String user = (String) session.getAttribute("user");
 		String forward = "";
-//		if (session.getAttribute("user") != null){
-//			RequestDispatcher view = request.getRequestDispatcher(LOGIN);
-//	        view.forward(request, response);
-//		} else {
-//			request.setAttribute("orders", dao.getOrdersByUserId(Integer.parseInt(user)));
-//		}
-		
-//		Cookie loginCookie = null;
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("user")) {
-//                    loginCookie = cookie;
-//                    break;
-//                }
-//            }
-//        }
-//        if (loginCookie != null) {
+
         if (session.getAttribute("user_id") != null) {
     	    if (session.getAttribute("user_id") != null && request.getParameter("action") != null) {
     	    	String action = request.getParameter("action");
@@ -71,7 +53,6 @@ public class CartController extends HttpServlet {
     	    		try {
     	    			dao.deleteOrder(id, user_id);
 					} catch (Exception e) {
-						// TODO: handle exception
 					}
     	    		
     	    	}
@@ -82,13 +63,14 @@ public class CartController extends HttpServlet {
         } else {
         	forward = LOGIN;
         }
-//        response.sendRedirect(forward);
+        
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
 		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
+		
 	}
 }

@@ -18,17 +18,24 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	@Override
-	public void addUser(User user) {
+	public int addUser(User user) {
+		int id = 0;
 		try {
             String query = "insert into users (email, password) values (?,?)";
             PreparedStatement preparedStatement = conn.prepareStatement( query );
             preparedStatement.setString( 1, user.getEmail());
             preparedStatement.setString( 2, user.getPassword());
             preparedStatement.executeUpdate();
+
+			ResultSet resultSet = preparedStatement.getGeneratedKeys();
+			if (resultSet.next()){
+			    id = resultSet.getInt(1);
+			}
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+		return id;
 	}
 
 	@Override
@@ -101,7 +108,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getPassword());
             ResultSet resultSet = preparedStatement.executeQuery();
-            while( resultSet.next() ) {
+            if ( resultSet.next() ) {
                 id = resultSet.getInt("id");
             }
             resultSet.close();

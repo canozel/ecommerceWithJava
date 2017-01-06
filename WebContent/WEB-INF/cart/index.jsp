@@ -8,7 +8,28 @@
 <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assets/stylesheets/materialize.min.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assets/stylesheets/style.css"  media="screen,projection"/>
+    <script type="text/javascript">
+    $(".check").on("click", function(){
+    	$.ajax({
+	        url: "/loginWithValidationJquery/register",
+	        type: "post",
+	        data: {check: true} ,
+	        success: function (data, status) {
+	        	console.log(data)
+	        	if (data == "true"){
+	        		$("input[name=email]").after('<label id="err" style="color:#ff5b5b">Başarılı. </label>');
+	        	} else {
+	        		$("input[name=email]").after('<label id="success" style="color:#78e878">Bu email kullanılabilir.</label>');
+	        	}
+	        },
+	        error: function(jqXHR, textStatus, errorThrown) {
+	           console.log(textStatus, errorThrown);
+	        }
+    	});
+    };
+    </script>
 </head>
+
 <body>
 	<div class="row">
 		<%@ include file="/WEB-INF/layout/nav.jsp"%>
@@ -16,15 +37,14 @@
 		<div class="col m10 page-content">
           <div class="row">
             <div class="col s12 m3">
-              <select>
-                <option class="black-text" value="" disabled selected>Choose your option</option>
-                <option value="1">Option 1</option>
-                <option value="2">Option 2</option>
-                <option value="3">Option 3</option>
+               <select>
+                <option class="black-text" value="" disabled selected>Sıralama Ölçütü</option>
+                <option value="1">Fiyatı artan</option>
+                <option value="2">Fiyatı azalan</option>
+                <option value="3">En çok satılan</option>
               </select>
             </div>
             <div class="col s12 m2">
-              bla bla
             </div>
             <div class="col s12 m7">
               <nav>
@@ -51,6 +71,9 @@
 	            </div>
 	        </div>	    
 	      </c:forEach>
+	      <div class='row'>
+            <a href = "/cart?action=check" type='submit' name='check' id="check"  class='col s12 btn btn-large waves-effect indigo'>Alışverişi onayla</a>
+          </div>
 	      <% } else { %>
 			<p>Sepetiniz henüz boş durumda</p>
 	      <% } %>

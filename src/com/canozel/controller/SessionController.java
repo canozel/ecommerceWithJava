@@ -2,6 +2,7 @@ package com.canozel.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -35,17 +36,6 @@ public class SessionController extends HttpServlet {
 		String uri = request.getRequestURI();
 		HttpSession session = request.getSession(false);
 		
-//		Cookie loginCookie = null;
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("user")) {
-//                    loginCookie = cookie;
-//                    break;
-//                }
-//            }
-//        }
-        
         if (session.getAttribute("user_id") == null) {
 			if (uri.equals("/login")){
 				forward = LOGIN;
@@ -55,12 +45,8 @@ public class SessionController extends HttpServlet {
 			}
 			
 	    } else { 
-//	    	if (uri.equals("/logout")){
-//	            loginCookie.setMaxAge(0);
-	            session.invalidate();
-//	            response.addCookie(loginCookie);
-	            forward = ROOT;
-//	    	}
+            session.invalidate();
+            forward = ROOT;
 	    }
 		RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
@@ -68,13 +54,13 @@ public class SessionController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		User user = new User();
+		HttpSession session = request.getSession();
         String forward = "";
         String uri = request.getRequestURI();
         int id;
 		if (uri.equals("/login")){
 	        user.setEmail(request.getParameter("email"));
 	        user.setPassword(request.getParameter("password"));
-	        HttpSession session = request.getSession();
 	        id = dao.authentication(user); 
 	        if (id != 0) {
 	            session.setAttribute("userName", user.getEmail());
@@ -88,19 +74,28 @@ public class SessionController extends HttpServlet {
 	        }
 	        
 		} else if (uri.equals("/register")){
-	        user.setEmail(request.getParameter("email"));
-	        user.setPassword(request.getParameter("password"));
-	        
-	        dao.addUser(user);
-	        
-//	        Cookie userCookie = new Cookie("user", user.getEmail());
-//            userCookie.setMaxAge(60 * 60);
-//            response.addCookie(userCookie);
-            forward = ROOT;
+			// FIX user email control with ajax. 
+			
+			/*if (request.getParameter("action") != null){
+				String action = request.getParameter("action");		
+				if (action.equalsIgnoreCase("check")) {
+					String email = request.getParameter("email");
+					response.getWriter().print(dao.doesExistUserEmail(email));
+				}
+			} else {*/
+				user.setEmail(request.getParameter("email"));
+		        user.setPassword(request.getParameter("password"));
+		        
+		        id = dao.addUser(user);
+		        
+	            session.setAttribute("userName", user.getEmail());
+	            session.setAttribute("user_id", id);
+	            forward = ROOT;
+			//}
 		}
-		response.sendRedirect(forward);
-//		RequestDispatcher view = request.getRequestDispatcher(forward);
-//        view.forward(request, response);
+		//response.sendRedirect(forward);
+		RequestDispatcher view = request.getRequestDispatcher(forward);
+		view.forward(request, response);
 	}
 
 }

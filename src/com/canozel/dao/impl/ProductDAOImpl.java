@@ -51,13 +51,14 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public void updateProduct(Product product) {
 		try {
-            String query = "update products set name = ?, description = ?, image = ?, price = ? category_id = ? where id = ?";
+            String query = "update products set name = ?, description = ?, image = ?, price = ?, category_id = ? where id = ?";
             PreparedStatement preparedStatement = conn.prepareStatement( query );
             preparedStatement.setString( 1, product.getName());
             preparedStatement.setString( 2, product.getDescription());
             preparedStatement.setString( 3, product.getImage());
             preparedStatement.setString( 4, product.getPrice());
             preparedStatement.setInt( 5, product.getCategory_id());
+            preparedStatement.setInt( 6, product.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
@@ -79,6 +80,7 @@ public class ProductDAOImpl implements ProductDAO {
                 product.setName(resultSet.getString("name"));
                 product.setImage(resultSet.getString("image"));
                 product.setPrice(resultSet.getString("price"));
+                product.setId( resultSet.getInt("category_id"));
             }
             resultSet.close();
             preparedStatement.close();
@@ -112,4 +114,26 @@ public class ProductDAOImpl implements ProductDAO {
         return products;
 	}
 
+	@Override
+	public List<Product> getProducts() {
+		List<Product> products = new ArrayList<Product>();
+        try {
+        	String query = "select * from products";
+        	PreparedStatement preparedStatement = conn.prepareStatement( query );
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while( resultSet.next() ) {
+            	Product product = new Product();
+                product.setId( resultSet.getInt("id"));
+                product.setDescription(resultSet.getString("description"));
+                product.setName(resultSet.getString("name"));
+                product.setImage(resultSet.getString("image"));
+                product.setPrice(resultSet.getString("price"));
+                products.add(product);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+	}
 }

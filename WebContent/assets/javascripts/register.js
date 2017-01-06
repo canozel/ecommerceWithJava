@@ -33,7 +33,7 @@ $(document).ready(function(){
 	    	$("#success").remove();
 	    	
 	    	 $.ajax({
-   	        url: "/loginWithValidationJquery/register",
+   	        url: "/register?action=check",
    	        type: "post",
    	        data: {email: $("input[name=email]").val()} ,
    	        success: function (data, status) {

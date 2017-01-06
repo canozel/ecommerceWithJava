@@ -71,4 +71,13 @@ public class OrderDAOImpl implements OrderDAO {
         return products;
 	}
 
+	@Override
+	public void checkOrders(int user_id) {
+		try {
+			String query = "";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

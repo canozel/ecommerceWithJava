@@ -16,42 +16,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	
-<title>CanHediye</title>
+<title>Admin Ürün</title>
 
 </head>
 <body>
       <div class="row">
-		<%@ include file="/WEB-INF/layout/nav.jsp"%>
-
-        <div class="col m10 page-content">
+		<%@ include file="/WEB-INF/layout/admin/nav.jsp"%>
+		          
           <div class="row">
-            <div class="col s12 m3">
-              <select>
-                <option class="black-text" value="" disabled selected>Sıralama Ölçütü</option>
-                <option value="1">Fiyatı artan</option>
-                <option value="2">Fiyatı azalan</option>
-                <option value="3">En çok satılan</option>
-              </select>
-            </div>
-            <div class="col s12 m2">
-              
-            </div>
-            <div class="col s12 m7">
-              <nav>
-                <div class="nav-wrapper orange accent-2">
-                  <form>
-                    <div class="input-field">
-                      <input id="search" type="search" required>
-                      <label for="search"><i class="material-icons">search</i></label>
-                      <i class="material-icons">close</i>
-                    </div>
-                  </form>
-                </div>
-              </nav>
-            </div>
-          </div>
-          
-          <div class="row">
+          <a href="/admin/products?action=new" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
           <c:forEach items="${products}" var="product">
             <div class="col s4 m4">
 	          <div class="card">
@@ -60,15 +33,18 @@
 	            </div>
 	            <div class="card-action">
 	              <span>${product.name}</span>
-	              <a href="/cart?action=new&id=${product.id}" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons right">add</i></a>
+	     	 	  <a href="/admin/products?action=delete&id=${product.id}" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">delete</i></a>
+	     	 	  <a href="/admin/products?action=edit&id=${product.id}" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
 	            </div>
 	          </div>    
 	        </div>
 	      </c:forEach>
 		  </div>
+	      
+	      <%@ include file="/WEB-INF/layout/admin/footer.jsp"%>	
 	    </div>
-      </div>  
-      
+	    </div>
+
           <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/javascripts/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/javascripts/materialize.min.js"></script>

@@ -11,7 +11,7 @@
       <hr>
       <li>
       	<% if (session.getAttribute("userName") != null) {%>
-      		${userName} <a href= "/logout">Çıkış Yap</a>
+      		<p>${userName}</p> <a href= "/logout">Çıkış Yap</a>
       	<% } else { %>
       		<a href= "/login">Giriş Yap</a>
       	<% } %> 
@@ -22,7 +22,7 @@
          <li>
            <a href="/products?category=${category.id}">${category.name}</a>
            <% if (session.getAttribute("user_id") != null && new UserDAOImpl().isAdmin((int )session.getAttribute("user_id"))) {%>
-           	 <a href="/cart?action=new&id=${category.id}" rel="nofollow" data-method="delete"><i class="material-icons right">delete</i></a>
+           	 <a href="/category?action=delete&id=${category.id}" rel="nofollow" data-method="delete"><i class="material-icons right">delete</i></a>
            	<% } %>
          </li>
        </c:forEach>

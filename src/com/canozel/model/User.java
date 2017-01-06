@@ -1,5 +1,7 @@
 package com.canozel.model;
 
+import com.canozel.util.CryptoUtil;
+
 public class User {
 	private int id;
 	private String email;
@@ -22,8 +24,7 @@ public class User {
 		return password;
 	}
 	public void setPassword(String password) {
-		//TODO encrypt
-		this.password = password;
+		this.password = password; //CryptoUtil.sha256(password);
 	}
 	public boolean getIs_admin() {
 		return is_admin;
